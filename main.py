@@ -13,8 +13,8 @@ mask = '/16'                                                        # Маска
 self_ip = '10.229.33.4/32'                                          # IP внешнего интерфейса
 gre_int_ip = '10.255.200.6'                                         # IP туннельного интерфейса
 local_net = '10.255.0.0/16'
-remote_site_ext_ip = '89.19.189.53'
-local_site_ext_ip = '23.100.43.215'
+remote_site_ext_ip = 'xxx.xxx.xxx.xxx'
+local_site_ext_ip = 'yyy.yyy.yyy.yyy'
 
 
 inc.get_file(url, datapath, filename)
