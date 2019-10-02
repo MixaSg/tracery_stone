@@ -1,3 +1,15 @@
-pip3 install requests
-pip3 install pandas
-pip3 install netaddr
+Tracery stone
+=====================
+Этот набор скриптов обрабатывает файл, содержащий IP-адреса и генерирует файлы конфигурации для 
+KAME и маршрутизатора Cisco. Основная статья доступна по ссылке 
+[dreamcatcher.ru](http://dreamcatcher.ru/2019/10/02/доступ-к-удаленным-сетям-с-помощью-ipsec-gre-туннеля-между-cisco-ios-и-freebsd)
+
+Установка:
+-----------------------------------
+Все примеры даны для FreeBSD 12.
+Для работы необходимо добавить модули:
+
+    pip-3.6 install requests
+    pip-3.6 install pandas
+    pip-3.6 install netaddr
+
