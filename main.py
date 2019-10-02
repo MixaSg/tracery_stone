@@ -16,7 +16,6 @@ local_net = '10.255.0.0/16'
 remote_site_ext_ip = 'xxx.xxx.xxx.xxx'
 local_site_ext_ip = 'yyy.yyy.yyy.yyy'
 
-
 inc.get_file(url, datapath, filename)
 raw_ips = inc.parse_file(datapath, filename)
 ips = inc.sort(raw_ips)
