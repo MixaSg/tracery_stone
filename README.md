@@ -13,3 +13,19 @@ KAME и маршрутизатора Cisco. Основная статья дос
     pip-3.6 install pandas
     pip-3.6 install netaddr
 
+Использование:
+-----------------------------------
+
+Для работы скрипта необходимо указать параметры:
+
+    datapath = 'data'                                               # Каталог для сохранения файлов
+    ipsec_conf_file = 'ipsec.conf'
+    cisco_conf_file = 'cisco.conf'                                  
+    filename = 'rawip'                                              # Имя файла с базой IP адресов
+    url = 'https://github.com/zapret-info/z-i/raw/master/dump.csv'  # Адрес дампа сетей
+    mask = '/16'                                                    # Маска для суммаризации сетей
+    self_ip = '10.229.33.4/32'                                      # IP внешнего интерфейса
+    gre_int_ip = '10.255.200.6'                                     # IP туннельного интерфейса
+    local_net = '10.255.0.0/16'                                     # Локальная сеть за Cisco
+    remote_site_ext_ip = 'xxx.xxx.xxx.xxx'                          # Внешний IP адрес Cisco
+    local_site_ext_ip = 'yyy.yyy.yyy.yyy'                           # Внешний IP адрес FreeBSD
