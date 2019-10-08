@@ -52,20 +52,24 @@ def sort(raw_ips):
     return np.sort(raw_ips)
 
 
-def collapse(ips, mask, remote_site_ext_ip, local_site_ext_ip):
+def collapse(ips, mask, exclude_net, remote_site_ext_ip, local_site_ext_ip):
     """
     :param ips:
     :param mask:
+    :param exclude_net:
+    :param remote_site_ext_ip:
+    :param local_site_ext_ip:
     :return:
     """
-    tmp_net = []
     net = []
-    for i in range(0, ips.shape[0]):
-        tmp_net.append(ipaddress.ip_interface(str(str(netaddr.IPAddress(ips[i], flags=netaddr.ZEROFILL).ipv4()) + mask)))  # Чистим строки от лишних 0 в начале октета, добавляем маску
-        net.append(str(tmp_net[i].network))                         # Получаем адрес сети согласно маске
+    exclude_net = np.asarray(exclude_net)
 
-    nets = np.asarray(net)                                           # Переводим в numpy
-    nets = np.unique(nets, axis=0)                                    # Удаляем дубликаты
+    for i in range(0, ips.shape[0]):
+        tmp_net = ipaddress.ip_interface(str(str(netaddr.IPAddress(ips[i], flags=netaddr.ZEROFILL).ipv4()) + mask)) # Чистим строки от лишних 0 в начале октета, добавляем маску
+        net.append(str(tmp_net.network))                         # Получаем адрес сети согласно маске
+
+    net = np.asarray(net)                                           # Переводим в numpy
+    net = np.unique(net, axis=0)                                    # Удаляем дубликаты
 
     # Для предотвращения ошибок маршрутизации, мы должны удалить из массива сети,
     # соотетствующие remote_site_ext_ip, local_site_ext_ip по mask
@@ -73,8 +77,18 @@ def collapse(ips, mask, remote_site_ext_ip, local_site_ext_ip):
     delete_remote = str(ipaddress.ip_interface(str(str(netaddr.IPAddress(remote_site_ext_ip, flags=netaddr.ZEROFILL).ipv4()) + mask)).network)
     delete_local = str(ipaddress.ip_interface(str(str(netaddr.IPAddress(local_site_ext_ip, flags=netaddr.ZEROFILL).ipv4()) + mask)).network)
 
-    nets = np.delete(nets, np.where(nets == delete_remote))
-    nets = np.delete(nets, np.where(nets == delete_local))
+    net = np.delete(net, np.where(net == delete_remote))
+    net = np.delete(net, np.where(net == delete_local))
+
+    # Если сеть входит с состав сети из списка exclude_net, ее необходимо удалить
+    # В версии python 3.7 можно использовать subnet_of(other)
+
+    nets = net
+    for i in range(0, net.shape[0]):
+        for y in range(0, exclude_net.shape[0]):
+            if ipaddress.ip_network(net[i]).overlaps((ipaddress.ip_network(exclude_net[y]))):
+                print('Found duplicate:', net[i], 'overlaps', ipaddress.ip_network(exclude_net[y]), 'network')
+                nets = np.delete(nets, np.where(nets == net[i]))
 
     print('Total networks: ', nets.shape[0])
     return nets
